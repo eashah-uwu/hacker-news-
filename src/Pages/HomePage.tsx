@@ -4,6 +4,11 @@ import Footer from "../Components/Footer";
 import { getStories, Story } from "../Api/stories";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretUp } from "@fortawesome/free-solid-svg-icons";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 
 function HomePage() {
   const [stories, setStories] = useState<Story[]>([]);
@@ -22,11 +27,7 @@ function HomePage() {
     setCurrentBatch((prevBatch) => prevBatch + 1);
   };
 
-  const extractHostname = (url: string) => {
-    const regex = /^(?:https?:\/\/)?(?:www\.)?([^\/]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : "";
-  };
+
 
   return (
     <>
@@ -48,13 +49,13 @@ function HomePage() {
                   <a href={story.url}>
                     {story.title}{" "}
                     <span className="text-gray-500">
-                      {extractHostname(story.url)}
+                    {story.url ? new URL(story.url).hostname : "N/A"}
                     </span>
                   </a>
                 </div>
                 <p className="text-gray-500">
                   {story.score} points by {story.by} |{" "}
-                  {new Date(story.time * 1000).toLocaleTimeString()} |{" "} |
+                  {dayjs(story.time * 1000).fromNow()} |{" "} |
                   {story.descendants} comments
                 </p>
               </div>
