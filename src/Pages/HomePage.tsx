@@ -27,15 +27,15 @@ function HomePage() {
     setCurrentBatch((prevBatch) => prevBatch + 1);
   };
 
-
+//taha says ke alag se function bana ke github ko deal karlena extractUrl
 
   return (
     <>
       <div className="w-full md:w-10/12 md:mt-2 mb-2 mx-auto bg-[#f6f6ef] min-h-screen text-sm flex flex-col">
         <Navbar />
         <ul className="flex flex-col flex-grow space-y-2 m-2 mt-4 font-verdana text-sm">
-          {stories.map((story, index) => (
-            <li key={story.id} className="flex items-start space-x-2 text-sm">
+          {stories.map(({url, title, by, descendants,score,id, time}, index) => (
+            <li key={id} className="flex items-start space-x-2 text-sm">
               <span className="text-gray-500">
                 {index + 1 + currentBatch * 30}.
               </span>
@@ -46,17 +46,17 @@ function HomePage() {
                     className="w-auto h-4 mr-1"
                     icon={faCaretUp}
                   />
-                  <a href={story.url}>
-                    {story.title}{" "}
+                  <a href={url}>
+                    {title}{" "}
                     <span className="text-gray-500">
-                    {story.url ? new URL(story.url).hostname : "N/A"}
+                    {url ? new URL(url).hostname : "N/A"} 
                     </span>
                   </a>
                 </div>
                 <p className="text-gray-500">
-                  {story.score} points by {story.by} |{" "}
-                  {dayjs(story.time * 1000).fromNow()} |{" "} |
-                  {story.descendants} comments
+                  {score} points by {by} |{" "}
+                  {dayjs(time * 1000).fromNow()} |{" "} |
+                  {descendants} comments
                 </p>
               </div>
             </li>
