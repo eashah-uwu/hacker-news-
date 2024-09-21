@@ -27,7 +27,6 @@ function HomePage() {
     setCurrentBatch((prevBatch) => prevBatch + 1);
   };
 
-//taha says ke alag se function bana ke github ko deal karlena extractUrl
 
   return (
     <>
