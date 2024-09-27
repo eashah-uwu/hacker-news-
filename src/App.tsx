@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import FilteredPage from "./Pages/FilteredPage";
-import { getIDs, Story, getAllStories, getStories } from "./Api/stories";
+import { getIDs, Story, getStories } from "./Api/stories";
 
 function App() {
   const [ids, setIDs] = useState<number[]>([]);
   const [stories, setStories] = useState<Story[]>([]);
+  const [batch, setBatch] = useState(0);
   const [currentStories, setCurrentStories] = useState<Story[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(0);
 
@@ -17,18 +18,24 @@ function App() {
   useEffect(() => {
     if (ids.length === 0) return;
     fetchStories();
-    fetchAllStories();
   }, [ids]);
+
+  useEffect(() => {
+    if (ids.length === 0) return;
+    if (batch <= 500 / 30) fetchAllStories(batch);
+  }, [ids, batch]);
 
   const fetchIDs = async () => {
     const storyIDs = await getIDs();
     setIDs(storyIDs);
   };
 
-  const fetchAllStories = async () => {
-    console.log("fetching all em sotries");
-    const Stories = await getAllStories(ids);
-    setStories(Stories);
+  const fetchAllStories = async (batch: number) => {
+    console.log("fetching all em sotries", batch);
+    const fetchedStories = await getStories(ids, batch);
+    console.log(fetchedStories);
+    setStories((s) => [...s, ...fetchedStories]);
+    setBatch((b) => b + 1);
   };
 
   const fetchStories = async () => {
